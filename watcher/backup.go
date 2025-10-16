@@ -1,5 +1,7 @@
 package watcher
 
+// BackupManager handles creating and managing file backup with versioning.
+
 import (
 	"fmt"
 	"os"
@@ -12,19 +14,21 @@ import (
 )
 
 type BackupManager struct {
-	backupDir   string
-	maxVersions int
-	logger      *utils.Logger
+	backupDir   string        // Directory where backup are stored
+	maxVersions int           // Maximum number of versions to keep, the oldest are deleted
+	logger      *utils.Logger // Logger instance for logging events
 }
 
+// NewBackupManager initializes a new BackupManager
 func NewBackupManager(backupDir string, maxVersions int) *BackupManager {
-	return &BackupManager {
-		backupDir: backupDir,
+	return &BackupManager{
+		backupDir:   backupDir,
 		maxVersions: maxVersions,
-		logger: utils.NewLogger(true, true),
+		logger:      utils.NewLogger(true, true),
 	}
 }
 
+// CreateBackup creates a timestamped backup of the specified file
 func (bm *BackupManager) CreateBackup(sourcePath, sourceDir string) error {
 	if _, err := os.Stat(sourcePath); os.IsNotExist(err) {
 		return fmt.Errorf("source file does not exist: %s", sourcePath)
@@ -41,7 +45,7 @@ func (bm *BackupManager) CreateBackup(sourcePath, sourceDir string) error {
 	nameWithoutExt := strings.TrimSuffix(filepath.Base(relPath), ext)
 	backupName := fmt.Sprintf("%s_%s%s", nameWithoutExt, timestamp, ext)
 
-	fileVersionDir := filepath.Join(bm.backupDir, relPath + "_versions")
+	fileVersionDir := filepath.Join(bm.backupDir, relPath+"_versions")
 	backupPath := filepath.Join(fileVersionDir, backupName)
 
 	if err := os.MkdirAll(fileVersionDir, 0755); err != nil {
@@ -61,6 +65,7 @@ func (bm *BackupManager) CreateBackup(sourcePath, sourceDir string) error {
 	return nil
 }
 
+// cleanOldVersions remove old versions exceeding maxVersions
 func (bm *BackupManager) cleanOldVersions(dir, baseName, ext string) error {
 	pattern := filepath.Join(dir, fmt.Sprintf("%s_*%s", baseName, ext))
 	matches, err := filepath.Glob(pattern)
@@ -85,6 +90,7 @@ func (bm *BackupManager) cleanOldVersions(dir, baseName, ext string) error {
 	return nil
 }
 
+// GetVersionCount returns the number of backup versions for a given file
 func (bm *BackupManager) GetVersionCount(baseName, ext string) (int, error) {
 	pattern := filepath.Join(bm.backupDir, fmt.Sprintf("%s_*%s", baseName, ext))
 	matches, err := filepath.Glob(pattern)
@@ -92,5 +98,5 @@ func (bm *BackupManager) GetVersionCount(baseName, ext string) (int, error) {
 		return 0, err
 	}
 
-	return len(matches), nil 
+	return len(matches), nil
 }
