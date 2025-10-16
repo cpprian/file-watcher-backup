@@ -133,7 +133,7 @@ func (fw *FileWatcher) handleEvent(event fsnotify.Event) {
 
 	switch {
 	case event.Op&fsnotify.Create == fsnotify.Create:
-		eventType = "CREATe"
+		eventType = "CREATE"
 
 		if isDir(event.Name) {
 			fw.watcher.Add(event.Name)
