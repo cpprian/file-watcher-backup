@@ -105,6 +105,14 @@ func (l *Logger) FileModified(filename string) {
 		l.colorize(ColorCyan+Bold, filename))
 }
 
+func (l *Logger) FileRenamed(filename string) {
+	fmt.Printf("%s%s %s %s\n",
+		l.timestamp(),
+		l.colorize(ColorMagenta, IconFile),
+		l.colorize(ColorWhite, "Renamed"),
+		l.colorize(ColorCyan+Bold, filename))
+}
+
 func (l *Logger) FileDeleted(filename string) {
 	fmt.Printf("%s%s %s %s\n",
 		l.timestamp(),
@@ -169,24 +177,24 @@ func (l *Logger) Headder(source, backup string, versions, workers int) {
 		l.colorize(ColorGray, "(recursive)"))
 
 	fmt.Printf("%s %s\n",
-		l.colorize(ColorWhite, IconBackup+ "  Backup to:"),
-		l.colorize(ColorGreen + Bold, backup))
+		l.colorize(ColorWhite, IconBackup+"  Backup to:"),
+		l.colorize(ColorGreen+Bold, backup))
 
 	fmt.Printf("%s %s\n",
 		l.colorize(ColorWhite, "📦  Versions:"),
-		l.colorize(ColorYellow + Bold, fmt.Sprintf("%d", versions)))
+		l.colorize(ColorYellow+Bold, fmt.Sprintf("%d", versions)))
 
 	fmt.Printf("%s %s\n",
 		l.colorize(ColorWhite, IconWorker+"  Workers:"),
-		l.colorize(ColorMagenta + Bold, fmt.Sprintf("%d", workers)))
+		l.colorize(ColorMagenta+Bold, fmt.Sprintf("%d", workers)))
 
-	fmt.Println(l.colorize(ColorGray, "\n" + "----------------------------------"))
+	fmt.Println(l.colorize(ColorGray, "\n"+"----------------------------------"))
 	fmt.Println(l.colorize(ColorYellow, "Press Ctrl+C to stop watching and exit."))
 	fmt.Println(l.colorize(ColorGray, "----------------------------------\n"))
 }
 
 func (l *Logger) Shutdown() {
-	fmt.Println(l.colorize(ColorYellow + Bold, "\n\n👋 Closing application..."))
+	fmt.Println(l.colorize(ColorYellow+Bold, "\n\n👋 Closing application..."))
 }
 
 func (l *Logger) ShutdownComplete(duration time.Duration) {
