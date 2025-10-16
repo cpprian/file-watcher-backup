@@ -34,7 +34,7 @@ func main() {
 			},
 			&cli.IntFlag{
 				Name:    "versions",
-				Aliases: []string{"v"},
+				Aliases: []string{"vers"},
 				Usage:   "Maximum number of versions to store per file",
 				Value:   3,
 			},
