@@ -1,1 +1,1 @@
-package wathcer
+package watcher
