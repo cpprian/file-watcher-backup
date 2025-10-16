@@ -13,6 +13,7 @@ import (
 	"github.com/cpprian/file-watcher-backup/utils"
 )
 
+// BackupManager handles creating and managing file backup with versioning.
 type BackupManager struct {
 	backupDir   string        // Directory where backup are stored
 	maxVersions int           // Maximum number of versions to keep, the oldest are deleted
